@@ -77,7 +77,14 @@ public class UnitCounter : MonoBehaviour
             {
                 GameObject goTo = new GameObject();
                 goTo.transform.position = sendPosition;
-                controller.GoTowards(goTo);
+                if (selectedUnits.Count == 1)
+                {
+                    controller.GoTowards(goTo, 0.1f);
+                }
+                else
+                {
+                    controller.GoTowards(goTo, -1);
+                }
             }
         }
     }

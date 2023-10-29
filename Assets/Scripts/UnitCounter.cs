@@ -12,39 +12,27 @@ public class UnitCounter : MonoBehaviour
     
     void Update()
     {
-        if (selectedUnits.Count > 0)
-        {
-            Debug.Log("Selected " + selectedUnits.Count);
-        }
         if (!dragStarted && Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Drag started!");
             dragStarted = true;
-            Vector2 mouseClickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mouseClickPos = Utils.Mouse.GetMousePosition();
             dragStartPos = mouseClickPos;
         }
         if (dragStarted && Input.GetMouseButtonUp(0))
         {
             dragStarted = false;
-            Vector2 dragStopPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 dragStopPos = Utils.Mouse.GetMousePosition();
 
-            Vector2[] corners = StandardizeCorners(dragStartPos, dragStopPos);
+            Vector2[] corners = Utils.Vectors.StandardizeCorners(dragStartPos, dragStopPos);
             SelectUnits(corners);
         }
         if (Input.GetMouseButtonDown(1))
         {
-            Vector2 sendPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 sendPosition = Utils.Mouse.GetMousePosition();
             SendSelectedUnits(sendPosition);
         }
     }
     #region Select Units
-    private Vector2[] StandardizeCorners(Vector2 dragStartPos, Vector2 dragStopPos)
-    {
-        Vector2 bottomLeft = new Vector2(dragStartPos.x < dragStopPos.x ? dragStartPos.x : dragStopPos.x, dragStartPos.y < dragStopPos.y ? dragStartPos.y : dragStopPos.y);
-        Vector2 topRight = new Vector2(dragStartPos.x > dragStopPos.x ? dragStartPos.x : dragStopPos.x, dragStartPos.y > dragStopPos.y ? dragStartPos.y : dragStopPos.y);
-        Vector2[] corners = { bottomLeft, topRight };
-        return corners;
-    }
     private void SelectUnits(Vector2[] corners)
     {
         selectedUnits = GetSelectedUnits(corners);
@@ -54,16 +42,11 @@ public class UnitCounter : MonoBehaviour
         List<GameObject> selectedUnits = new List<GameObject>();
         foreach (var unit in controllableUnits)
         {
-            if(IsUnitInBox(unit, corners[0], corners[1])){
+            if(Utils.Vectors.IsPositionInBox(unit.transform.position, corners[0], corners[1])){
                 selectedUnits.Add(unit);
             }
         }
         return selectedUnits;
-    }
-    private bool IsUnitInBox(GameObject unit, Vector2 bottomLeft, Vector2 topRight)
-    {
-        Vector2 unitPos = unit.transform.position;
-        return unitPos.y < topRight.y && unitPos.y > bottomLeft .y && unitPos.x > bottomLeft.x && unitPos.x < topRight.x;
     }
     #endregion
 

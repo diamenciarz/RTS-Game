@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\UnitController.cs" />
     <Compile Include="Assets\Scripts\MoveToMouseClick.cs" />
+    <Compile Include="Assets\Scripts\Utils.cs" />
+    <Compile Include="Assets\Scripts\SelectionBoxRenderer.cs" />
     <Compile Include="Assets\Scripts\UnitCounter.cs" />
   </ItemGroup>
   <ItemGroup>
